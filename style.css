@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+header {
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+}
+
+h1 {
+    font-size: large;
+    font-weight: bold;
+    margin: 0;
+}
+
+main {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+#gameDiv {
+    text-align: center;
+    /* overflow:auto; */
+}
+
+section {
+    margin-top: 40px;
+}
+
+h2 {
+    font-size: large;
+    font-weight: bold;
+}
+
+ul {
+    margin: 0;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 80px 0;
+}
+
+footer p {
+    font-size: small;
+    text-align: center;
+    margin: 0;
+}

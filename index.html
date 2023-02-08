@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <title>埋め込め！バートちゃん</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link href="style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>埋め込め！バートちゃん</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="gameDiv"></div>
+
+            <section>
+                <p>バートちゃんの訓練をサポートして、リーダボードのソータを狙え！</p>
+            </section>
+            <section>
+                <h2>あそびかた</h2>
+                <p>画面に現れるマスクトークンをクリックして、アンマスクしよう。たくさんアンマスクするとロスが下がって、スコアが上がるぞ。</p>
+            </section>
+
+            <section>
+                <h2>キャラ</h2>
+
+                <p>バートちゃんは、双方向の文脈を考慮して単語を埋め込めるエンコーダ。いくつも重ねたアテンションで、あらゆるタスクをこなしてしまう。成績は優秀だが、少しおっちょこちょいなところも。本を読んだり、ウェブを見たりするのが好き。</p>
+            </section>
+            
+            <section>
+                <h2>参考文献</h2>
+                <ul>
+                    <li>Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers), pages 4171–4186, Minneapolis, Minnesota. Association for Computational Linguistics.</li>
+                    <li>柴田 知秀, 河原 大輔, 黒橋 禎夫: BERTによる日本語構文解析の精度向上, 言語処理学会 第25回年次大会, pp.205-208, 名古屋, (2019.3).</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy;tide525</p>
+        </div>
+    </footer>
+
+    <script>
+        var config = {
+            parent: 'gameDiv',
+            type: Phaser.AUTO,
+            width: 640,
+            height: 360,
+            backgroundColor: '#ffffff',
+            fps: {
+                target: 15,
+                forceSetTimeOut: true
+            },
+            scene: [SceneA, SceneB, SceneC]
+        };
+
+        var game = new Phaser.Game(config);
+    </script>
+</body>
+
+</html>
