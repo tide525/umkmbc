@@ -6,12 +6,14 @@ class SceneA extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('title', 'result_default.png');
+        this.load.image('title', 'assets/sprites/other.png');
+        this.load.audio('start', 'assets/audio/決定ボタンを押す39.mp3');
     }
 
     create() {
         this.cameras.main.setBackgroundColor('#eeeeee');
         this.add.image(320, 200, 'title');
+        this.startSound = this.sound.add('start');
 
         this.add.text(320, 80, '埋め込め！バートちゃん', {
             fontSize: '2em',
@@ -35,6 +37,7 @@ class SceneA extends Phaser.Scene {
         // 画面をクリック
         this.input.manager.enabled = true;
         this.input.once('pointerdown', function() {
+            this.startSound.play();
             this.scene.start('sceneB');
         }, this);
     }
@@ -46,10 +49,11 @@ class SceneB extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet('studying', 'studying.png', {
+        this.load.spritesheet('study', 'assets/sprites/study.png', {
             frameWidth: 160,
             frameHeight: 160,
         });
+        this.load.audio('unmask', 'assets/audio/カーソル移動7.mp3');
     }
 
     create() {
@@ -75,11 +79,14 @@ class SceneB extends Phaser.Scene {
         // アニメーション
         this.anims.create({
             key: 'study',
-            frames: this.anims.generateFrameNumbers('studying', { frames: [ 0, 1 ] }),
+            frames: this.anims.generateFrameNumbers('study', { frames: [ 0, 1 ] }),
             frameRate: 2,
             repeat: -1
         });
-        this.add.sprite(320, 280, "bert_chan").play("study");
+        this.add.sprite(320, 280, 'study').play('study');
+
+        // 効果音
+        this.unmaskSound = this.sound.add('unmask');
 
         // 進捗バー
         this.barWidth = 240;
@@ -175,6 +182,9 @@ class SceneB extends Phaser.Scene {
 
         // クリックで消滅
         text.on('pointerdown', function() {
+            // 音が鳴る
+            this.unmaskSound.play()
+
             // 残り時間でスコア
             this.hiddenScore += Math.floor(this.tokenSeconds * 1000 - disappearEvent.getElapsed());  // 平均333
             this.loss = this.maxLoss * Math.exp(-2 * this.hiddenScore / 10000);  // 平均の合計で正規化、適当にスケール
@@ -206,13 +216,19 @@ class SceneC extends Phaser.Scene {
 
     init(data) {
         this.hiddenScore = data.score;
-        this.score = 100 * (1 - Math.exp(-3 * this.hiddenScore / 10000));
+        this.score = 100 / (1 + Math.exp(-3 * this.hiddenScore / 10000));
     }
 
     preload() {
-        this.load.image('result-best', 'result_best.png');
-        this.load.image('result-default', 'result_default.png');
-        this.load.image('result-worst', 'result_worst.png');
+        this.load.image('best', 'assets/sprites/best.png');
+        this.load.image('other', 'assets/sprites/other.png');
+        this.load.image('worst', 'assets/sprites/worst.png');
+
+        this.load.audio('best', 'assets/audio/決定ボタンを押す41.mp3');
+        this.load.audio('worst', 'assets/audio/決定ボタンを押す39.mp3');
+        this.load.audio('other', 'assets/audio/決定ボタンを押す39.mp3');
+
+        this.load.audio('return', 'assets/audio/決定ボタンを押す39.mp3');
     }
 
     create() {
@@ -225,7 +241,7 @@ class SceneC extends Phaser.Scene {
             { model: 'ロベルタ', score: 88.0, color: 'black' },
         ];
 
-        // リーダーボード構築
+        // リーダボード構築
         var me = { model: 'バート', score: this.score, color: '#e65f57' };
         members.push(me);
 
@@ -244,7 +260,7 @@ class SceneC extends Phaser.Scene {
         this.add.text(modelX, headerY, 'モデル', headerConfig).setOrigin(0, 0.5);
         this.add.text(scoreX, headerY, 'スコア', headerConfig).setOrigin(1, 0.5);
 
-        // リーダーボード表示
+        // リーダボード表示
         for (var i = 0; i < members.length; i++) {
             var member = members[i];
 
@@ -260,12 +276,13 @@ class SceneC extends Phaser.Scene {
             this.add.text(scoreX, memberY, memberScore, memberConfig).setOrigin(1, 0.5);
         }
 
+        // キャラ
         var charX = 120;
         var charY = 200;
         var myRank = members.indexOf(me) + 1;
         switch (myRank) {
             case 1:
-                this.add.image(charX, charY, 'result-best');
+                this.add.image(charX, charY, 'best');
                 this.add.text(80, 120, 'ソータ！', {
                     fontSize: 'large',
                     fontStyle: 'bold',
@@ -273,30 +290,56 @@ class SceneC extends Phaser.Scene {
                 }).setOrigin(0.5);
                 break;
             case members.length:
-                this.add.image(charX, charY, 'result-worst');
+                this.add.image(charX, charY, 'worst');
                 break;
             default:
-                this.add.image(charX, charY, 'result-default');
+                this.add.image(charX, charY, 'other');
         }
 
+        // 効果音
+        var bestSound = this.sound.add('best');
+        var worstSound = this.sound.add('worst');
+        var otherSound = this.sound.add('other');
+        switch (myRank) {
+            case 1:
+                bestSound.play();
+                break;
+            case members.length:
+                worstSound.play();
+                break;
+            default:
+                otherSound.play();
+        }
+
+        // タイトルに戻るテキスト
         this.time.addEvent({
             delay: 2000,
             callback: this.returnHandler,
             callbackScope: this
         });
+        this.returnSound = this.sound.add('return');
     }
 
     update() {}
 
     returnHandler() {
-        this.add.text(320, 320, 'タイトルに戻る', {
+        this.returnText = this.add.text(320, 320, 'タイトルに戻る', {
             fontSize: '2em',
             color: '#2b5283'
         }).setOrigin(0.5);
+        this.tweens.add({
+            targets: this.returnText,
+            alpha: 0,
+            duration: 1000,
+            ease: 'Stepped',
+            repeat: -1,
+            repeatDelay: 1000,
+        });
 
         // 画面クリック
         this.input.manager.enabled = true;
         this.input.once('pointerdown', function() {
+            this.returnSound.play();
             this.scene.start('sceneA');
         }, this);
     }
