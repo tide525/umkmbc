@@ -6,8 +6,10 @@ class SceneA extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('title', 'assets/sprites/other.png');
-        this.load.audio('start', 'assets/audio/決定ボタンを押す39.mp3');
+        this.load.image('title', 'assets/sprites/result_other.png');
+
+        this.load.audio('start', 'assets/audio/push.mp3');
+        this.sound.setVolume(0.5);
     }
 
     create() {
@@ -53,7 +55,9 @@ class SceneB extends Phaser.Scene {
             frameWidth: 160,
             frameHeight: 160,
         });
-        this.load.audio('unmask', 'assets/audio/カーソル移動7.mp3');
+
+        this.load.audio('unmask', 'assets/audio/unmask.mp3');
+        this.sound.setVolume(0.5);
     }
 
     create() {
@@ -220,15 +224,15 @@ class SceneC extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('best', 'assets/sprites/best.png');
-        this.load.image('other', 'assets/sprites/other.png');
-        this.load.image('worst', 'assets/sprites/worst.png');
+        this.load.image('best', 'assets/sprites/result_best.png');
+        this.load.image('worst', 'assets/sprites/result_worst.png');
+        this.load.image('other', 'assets/sprites/result_other.png');
 
-        this.load.audio('best', 'assets/audio/決定ボタンを押す41.mp3');
-        this.load.audio('worst', 'assets/audio/決定ボタンを押す39.mp3');
-        this.load.audio('other', 'assets/audio/決定ボタンを押す39.mp3');
-
-        this.load.audio('return', 'assets/audio/決定ボタンを押す39.mp3');
+        this.load.audio('best', 'assets/audio/result_best.mp3');
+        this.load.audio('worst', 'assets/audio/result_other.mp3');
+        this.load.audio('other', 'assets/audio/result_other.mp3');
+        this.load.audio('return', 'assets/audio/push.mp3');
+        this.sound.setVolume(0.5);
     }
 
     create() {
